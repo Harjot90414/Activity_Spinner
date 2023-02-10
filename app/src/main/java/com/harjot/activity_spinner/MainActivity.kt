@@ -1,53 +1,57 @@
 package com.harjot.activity_spinner
 
 import android.R
+import android.app.AlertDialog
 import android.app.Dialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.view.WindowManager
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.ListAdapter
 import android.widget.Spinner
-import android.widget.SpinnerAdapter
 import android.widget.Toast
 import androidx.core.view.get
 import com.harjot.activity_spinner.databinding.ActivityMainBinding
+import com.harjot.activity_spinner.databinding.EditBtnDialogBinding
 import com.harjot.activity_spinner.databinding.FabBtnDialogBinding
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(),ClickInterface {
     lateinit var binding:ActivityMainBinding
     lateinit var spinner: Spinner
     lateinit var spinnerAdapter: ArrayAdapter<String>
-    lateinit var arrayAdapter: ArrayAdapter<String>
+    lateinit var adapter: ListAdapter
+    var position=0
 
     var spinnerArray= arrayListOf<String>()
-    var arrayList= arrayListOf<String>()
+    var userArray= ArrayList<UserModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding= ActivityMainBinding.inflate(layoutInflater)
-
+        binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        spinner=binding.spinner
+        spinner = binding.spinner
 
-        arrayAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, arrayList)
+        adapter = ListAdapter(userArray,this)
+        spinnerAdapter = ArrayAdapter(this, R.layout.simple_list_item_1, spinnerArray)
+        binding.spinner.adapter = spinnerAdapter
+        binding.lvListView.adapter = adapter
 
-        spinnerAdapter= ArrayAdapter(this, R.layout.simple_list_item_1, spinnerArray)
-        binding.spinner.adapter= spinnerAdapter
-
-        binding.lvListView.adapter= arrayAdapter
-
-        binding.fabBtn.setOnClickListener{
-            var dialog=Dialog(this)
-            var dialogBinding=FabBtnDialogBinding.inflate(layoutInflater)
+        binding.fabBtn.setOnClickListener {
+            var dialog = Dialog(this)
+            var dialogBinding = FabBtnDialogBinding.inflate(layoutInflater)
             dialog.setContentView(dialogBinding.root)
-            dialog.window?.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT)
+            dialog.window?.setLayout(
+                WindowManager.LayoutParams.MATCH_PARENT,
+                WindowManager.LayoutParams.WRAP_CONTENT
+            )
 
             dialogBinding.btnAdd1.setOnClickListener {
-                if(dialogBinding.etItemName.text.toString().trim().isNullOrEmpty()){
-                    dialogBinding.etItemName.error="Enter Item"
-                    Toast.makeText(this,"Enter Item !!!", Toast.LENGTH_LONG).show()
-                }
-                else{
+                if (dialogBinding.etItemName.text.toString().trim().isNullOrEmpty()) {
+                    dialogBinding.etItemName.error = "Enter Item"
+                    Toast.makeText(this, "Enter Item !!!", Toast.LENGTH_LONG).show()
+                } else {
                     spinnerArray.add(dialogBinding.etItemName.text.toString())
                     spinnerAdapter.notifyDataSetChanged()
                     dialog.dismiss()
@@ -55,15 +59,67 @@ class MainActivity : AppCompatActivity() {
             }
             dialog.show()
         }
-        binding.btnAdd2.setOnClickListener {
-            if(binding.spinner.toString().trim().isNullOrEmpty()){
-                Toast.makeText(this, "Enter Spinner Item", Toast.LENGTH_SHORT).show()
+        binding.spinner.setOnItemSelectedListener(object: AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                position = p2
             }
-            else{
-                arrayList.add(binding.spinner.toString())
-                arrayAdapter.notifyDataSetChanged()
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+                position = -1
+            }
+        })
+
+        binding.btnAdd2.setOnClickListener {
+            if (binding.spinner.toString().trim().isNullOrEmpty()) {
+                Toast.makeText(this, "Enter Spinner Item", Toast.LENGTH_SHORT).show()
+            } else {
+                userArray.add(UserModel(spinnerArray[position]))
+                spinnerAdapter.notifyDataSetChanged()
             }
         }
+
+    }
+
+    override fun editClick(position: Int) {
+        var dialog = Dialog(this)
+        var dialogBinding = EditBtnDialogBinding.inflate(layoutInflater)
+
+        dialog.setContentView(dialogBinding.root)
+        dialog.window?.setLayout(
+            WindowManager.LayoutParams.MATCH_PARENT,
+            WindowManager.LayoutParams.WRAP_CONTENT
+        )
+        dialogBinding.btnUpdate.setOnClickListener {
+            if(dialogBinding.etName.text.toString().isNullOrEmpty()){
+                dialogBinding.etName.error = "Enter Name"
+            }
+            else {
+                userArray[position]=(UserModel(dialogBinding.etName.text.toString()))
+                spinnerAdapter.notifyDataSetChanged()
+                dialog.dismiss()
+            }
+        }
+
+        dialog.show()
+
+    }
+
+    override fun deleteClick(position: Int) {
+        var alertDialog= AlertDialog.Builder(this)
+        alertDialog.setTitle("Delete Item")
+        alertDialog.setMessage("Do you want to delete the item?")
+        alertDialog.setCancelable(false)
+        alertDialog.setNegativeButton("No"){_,_->
+            alertDialog.setCancelable(true)
+        }
+        alertDialog.setPositiveButton("Yes"){_,_->
+            Toast.makeText(this, "The item is  deleted", Toast.LENGTH_SHORT).show()
+            userArray.removeAt(position)
+            spinnerAdapter.notifyDataSetChanged()
+
+
+        }
+        alertDialog.show()
 
     }
 }

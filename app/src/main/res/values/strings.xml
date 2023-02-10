@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">Activity_Spinner</string>
+    <string name="name">Name</string>
+    <string name="update">Update</string>
     <string-array name="blood_group">
         <item name="a">A+</item>
         <item name="b">B+</item>
