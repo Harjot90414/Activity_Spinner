@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Activity_Spinner</string>
+    <string-array name="blood_group">
+        <item name="a">A+</item>
+        <item name="b">B+</item>
+        <item name="o">O+</item>
+        <item name="ab">AB+</item>
+    </string-array>
+</resources>

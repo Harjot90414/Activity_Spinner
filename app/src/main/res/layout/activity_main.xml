@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:id="@+id/linear1"
+    >
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:id="@+id/spinner"
+        android:layout_weight="1"
+        />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginEnd="@dimen/margin_10dp"
+        android:gravity="center">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add"
+            android:id="@+id/btnAdd2"/>
+<!--        <ImageView-->
+<!--            android:id="@+id/ivEdit"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:src="@drawable/ic_edit"-->
+<!--            android:layout_weight="1"-->
+<!--            />-->
+<!--        <ImageView-->
+<!--            android:id="@+id/ivDelete"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:src="@drawable/ic_delete"-->
+<!--            android:layout_weight="1"/>-->
+    </LinearLayout>
+</LinearLayout>
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/lvListView"
+        android:layout_marginTop="15dp"
+        android:layout_below="@+id/linear1"
+        />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/fabBtn"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="@dimen/margin_20dp"
+        android:src="@android:drawable/ic_input_add"
+        />
+
+</RelativeLayout>
