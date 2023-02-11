@@ -11,11 +11,13 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.ListAdapter
 import android.widget.Spinner
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.get
 import com.harjot.activity_spinner.databinding.ActivityMainBinding
 import com.harjot.activity_spinner.databinding.EditBtnDialogBinding
 import com.harjot.activity_spinner.databinding.FabBtnDialogBinding
+import com.harjot.activity_spinner.databinding.ItemBaseAdapterBinding
 
 class MainActivity : AppCompatActivity(),ClickInterface {
     lateinit var binding:ActivityMainBinding
@@ -23,6 +25,7 @@ class MainActivity : AppCompatActivity(),ClickInterface {
     lateinit var spinnerAdapter: ArrayAdapter<String>
     lateinit var adapter: ListAdapter
     var position=0
+
 
     var spinnerArray= arrayListOf<String>()
     var userArray= ArrayList<UserModel>()
@@ -120,6 +123,14 @@ class MainActivity : AppCompatActivity(),ClickInterface {
 
         }
         alertDialog.show()
+
+    }
+
+    override fun addCounter(position: Int) {
+        
+    }
+
+    override fun removeCounter(position: Int) {
 
     }
 }
