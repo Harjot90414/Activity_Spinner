@@ -11,9 +11,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.ListAdapter
 import android.widget.Spinner
-import android.widget.TextView
 import android.widget.Toast
-import androidx.core.view.get
 import com.harjot.activity_spinner.databinding.ActivityMainBinding
 import com.harjot.activity_spinner.databinding.EditBtnDialogBinding
 import com.harjot.activity_spinner.databinding.FabBtnDialogBinding
@@ -22,10 +20,10 @@ import com.harjot.activity_spinner.databinding.ItemBaseAdapterBinding
 class MainActivity : AppCompatActivity(),ClickInterface {
     lateinit var binding:ActivityMainBinding
     lateinit var spinner: Spinner
+    lateinit var binding1:ItemBaseAdapterBinding
     lateinit var spinnerAdapter: ArrayAdapter<String>
-    lateinit var adapter: ListAdapter
+    lateinit var adapter: UserListAdapter
     var position=0
-
 
     var spinnerArray= arrayListOf<String>()
     var userArray= ArrayList<UserModel>()
@@ -36,7 +34,7 @@ class MainActivity : AppCompatActivity(),ClickInterface {
 
         spinner = binding.spinner
 
-        adapter = ListAdapter(userArray,this)
+        adapter = UserListAdapter(userArray,this)
         spinnerAdapter = ArrayAdapter(this, R.layout.simple_list_item_1, spinnerArray)
         binding.spinner.adapter = spinnerAdapter
         binding.lvListView.adapter = adapter
@@ -92,13 +90,14 @@ class MainActivity : AppCompatActivity(),ClickInterface {
             WindowManager.LayoutParams.MATCH_PARENT,
             WindowManager.LayoutParams.WRAP_CONTENT
         )
+
         dialogBinding.btnUpdate.setOnClickListener {
             if(dialogBinding.etName.text.toString().isNullOrEmpty()){
                 dialogBinding.etName.error = "Enter Name"
             }
             else {
                 userArray[position]=(UserModel(dialogBinding.etName.text.toString()))
-                spinnerAdapter.notifyDataSetChanged()
+                adapter.notifyDataSetChanged()
                 dialog.dismiss()
             }
         }
@@ -116,21 +115,27 @@ class MainActivity : AppCompatActivity(),ClickInterface {
             alertDialog.setCancelable(true)
         }
         alertDialog.setPositiveButton("Yes"){_,_->
-            Toast.makeText(this, "The item is  deleted", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "The item is deleted", Toast.LENGTH_SHORT).show()
             userArray.removeAt(position)
-            spinnerAdapter.notifyDataSetChanged()
-
-
+            adapter.notifyDataSetChanged()
         }
         alertDialog.show()
 
     }
 
     override fun addCounter(position: Int) {
-        
+        userArray[position].qty = (userArray[position].qty?:0)+1
+        adapter.notifyDataSetChanged()
     }
 
     override fun removeCounter(position: Int) {
-
+        if(userArray[position].qty!! <= 1){
+            userArray.removeAt(position)
+            adapter.notifyDataSetChanged()
+        }
+        else{
+            userArray[position].qty = (userArray[position].qty?:0)-1
+            adapter.notifyDataSetChanged()
+        }
     }
 }
