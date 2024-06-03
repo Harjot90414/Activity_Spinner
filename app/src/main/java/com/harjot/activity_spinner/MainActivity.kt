@@ -20,7 +20,6 @@ import com.harjot.activity_spinner.databinding.ItemBaseAdapterBinding
 class MainActivity : AppCompatActivity(),ClickInterface {
     lateinit var binding:ActivityMainBinding
     lateinit var spinner: Spinner
-    lateinit var binding1:ItemBaseAdapterBinding
     lateinit var spinnerAdapter: ArrayAdapter<String>
     lateinit var adapter: UserListAdapter
     var position=0
@@ -71,7 +70,7 @@ class MainActivity : AppCompatActivity(),ClickInterface {
         })
 
         binding.btnAdd2.setOnClickListener {
-            if (binding.spinner.toString().trim().isNullOrEmpty()) {
+                if (binding.spinner.toString().trim().isNullOrEmpty()) {
                 Toast.makeText(this, "Enter Spinner Item", Toast.LENGTH_SHORT).show()
             } else {
                 userArray.add(UserModel(spinnerArray[position]))
